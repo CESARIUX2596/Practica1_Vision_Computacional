@@ -21,7 +21,7 @@ def FeatureMatching(img2, img1):
     else:
         pass
     dst = cv2.warpPerspective(img1,H,(img2.shape[1] + img1.shape[1], img2.shape[0]))
-    dst[0:img1.shape[0], 0:img2.shape[1]] = img2
+    dst[0:img1.shape[0], 0:img2.shape[1]-10] = img2[:,:img2.shape[1]-10]
     return CropBlackSpace(dst)
 
 def CropBlackSpace(img):
