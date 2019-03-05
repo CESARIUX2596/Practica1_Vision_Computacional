@@ -7,6 +7,7 @@ flannParam = dict(algorithm = 0, tree = 5)
 searchParam = dict(checks = 10)
 flann = cv2.FlannBasedMatcher(flannParam,searchParam)
 
+bf = cv2.BFMatcher()
 sample = cv2.imread("book.png")
 sample = cv2.cvtColor(sample,cv2.COLOR_BGR2GRAY)
 trainKP,trainDesc = detector.detectAndCompute(sample,None)
@@ -22,7 +23,7 @@ while (cap.isOpened()):
         frame = cv2.resize(frame, (640, 480), interpolation = cv2.INTER_LINEAR)
         gray = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
         frameKP,frameDesc = detector.detectAndCompute(gray,None)
-        matches = flann.knnMatch(frameDesc,trainDesc,k = 2)
+        matches = bf.knnMatch(frameDesc,trainDesc,k = 2)
 
         good = []
         for m,n in matches:
@@ -39,6 +40,7 @@ while (cap.isOpened()):
             h, w = sample.shape
             trainBorder = np.float32([[[0,0],[0,h-1], [w-1,h-1],[w-1,0]]])
             frameBorder = cv2.perspectiveTransform(trainBorder, H)
+        if frameBorder is not None:
             cv2.polylines(frame,[np.int32(frameBorder)], True, (0,255,0), 3)
         # cv2.imwrite("result.mp4",frame)
         out.write(frame)
