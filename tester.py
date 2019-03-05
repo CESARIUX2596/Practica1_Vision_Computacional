@@ -15,7 +15,7 @@ trainKP,trainDesc = detector.detectAndCompute(sample,None)
 cap = cv2.VideoCapture("Book.mp4")
 fourcc = cv2.VideoWriter_fourcc(*'XVID')
 out = cv2.VideoWriter('output.avi', fourcc, 20.0, (640,480))
-
+frameBoard= None
 while (cap.isOpened()):
     try:
 
@@ -27,7 +27,7 @@ while (cap.isOpened()):
 
         good = []
         for m,n in matches:
-            if(m.distance < 0.7 * n.distance):
+            if(m.distance < 0.75 * n.distance):
                 good.append(m)
         if (len(good) > 10):
             tp = []
@@ -42,7 +42,7 @@ while (cap.isOpened()):
             frameBorder = cv2.perspectiveTransform(trainBorder, H)
         if frameBorder is not None:
             cv2.polylines(frame,[np.int32(frameBorder)], True, (0,255,0), 3)
-        # cv2.imwrite("result.mp4",frame)
+##        cv2.imshow("result.mp4",frame)
         out.write(frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
